@@ -21,9 +21,6 @@ class Towers:
             print "%s %s" % ("+--" * ring, self.towers)
             self.solveTower(ring - 1, buff, target, src)
 
-        # print "%ssolving level %s on %s" % ("+--" * ring, ring, src)
-
-
 t = Towers(5)
 t.towers[0]
 print t.towers
