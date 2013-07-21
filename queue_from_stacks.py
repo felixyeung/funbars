@@ -4,16 +4,16 @@ class MyQueue:
         self.queue = []
 
     def push(self, val):
-        self.buff.push(val)
-        while self.queue:
-            self.buff.append(self.queue.pop())
         self.buff.append(val)
 
     def shift(self):
-        if not self.queue
+        if not self.queue:
             while self.buff:
                 self.queue.append(self.buff.pop())
         return self.queue.pop()
+
+    def isEmpty(self):
+        return (not self.buff and not self.queue)
 
 mq = MyQueue()
 mq.push('a')
@@ -31,4 +31,9 @@ mq.push('o')
 mq.push('b')
 mq.push('a')
 mq.push('r')
+
 print mq.queue
+print mq.buff
+
+while not mq.isEmpty():
+    print mq.shift()
