@@ -4,14 +4,15 @@ class MyQueue:
         self.queue = []
 
     def push(self, val):
-        self.buff = []
+        self.buff.push(val)
         while self.queue:
             self.buff.append(self.queue.pop())
         self.buff.append(val)
-        while self.buff:
-            self.queue.append(self.buff.pop())
 
     def shift(self):
+        if not self.queue
+            while self.buff:
+                self.queue.append(self.buff.pop())
         return self.queue.pop()
 
 mq = MyQueue()
