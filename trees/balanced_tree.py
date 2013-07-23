@@ -11,15 +11,15 @@ class MyNode:
         self.right = node
 
     def isBalanced(self):
-        print self.countDepth(self.left) 
-        print self.countDepth(self.right)
         return self.countDepth(self.left) == self.countDepth(self.right)
 
     def countDepth(self, node):
         if node == None:
             return 0;
         else:
-            return 1 + max(self.countDepth(node.left), self.countDepth(node.right)) 
+            depth = 1 + max(self.countDepth(node.left), self.countDepth(node.right))
+            print "looking at node %s at depth %d" % (node.val, depth)
+            return  depth
 
 root = MyNode('a')
 b = MyNode('b')
@@ -44,7 +44,7 @@ b.addRight(g)
 d.addLeft(e)
 d.addRight(f)
 
-e.addLeft(h)
+e.addRight(h)
 
 c.addLeft(i)
 c.addRight(j)
