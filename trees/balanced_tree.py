@@ -19,7 +19,7 @@ class MyNode:
         if node == None:
             return 0;
         else:
-            return 1 + min(self.countDepth(node.left), self.countDepth(node.right)) 
+            return 1 + max(self.countDepth(node.left), self.countDepth(node.right)) 
 
 root = MyNode('a')
 b = MyNode('b')
