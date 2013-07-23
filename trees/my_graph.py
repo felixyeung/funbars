@@ -1,3 +1,6 @@
+from collections import deque
+
+
 class MyNode:
     def __init__(self, val):
         self.val = val
@@ -11,9 +14,21 @@ class MyNode:
         print "Visiting %s" % (self.val)
         visited.append(self)
         for each in self.adjacenies:
-            if each not in visi
-            ted:
+            if each not in visited:
                 each.dfs(visited)
+
+    def bfs(self):
+        q = deque([])
+        visited = []
+
+        q.append(self)
+        while q:
+            curr = q.popleft()
+            if curr not in visited:
+                print "Visiting %s" % (curr.val)
+                visited.append(curr)
+                for each in curr.adjacenies:
+                    q.append(each)
 
 
 
@@ -29,5 +44,7 @@ b.addPath(c)
 b.addPath(d)
 c.addPath(d)
 e.addPath(root)
-
+print "DFS:"
 root.dfs([])
+print "BFS:"
+root.bfs()
