@@ -32,6 +32,8 @@ class MyNode:
 
 # Has route can be implemented with *fs if we are not
 # concerned about the shortest path.
+
+
 def hasRoute(start, end):
     q = deque([])
     visited = []
@@ -39,7 +41,7 @@ def hasRoute(start, end):
     q.append(start)
     while q:
             curr = q.popleft()
-            if q == end:
+            if curr == end:
                 print "Path from %s to %s found" % (start.val, end.val)
                 return True
             if curr not in visited:
@@ -47,6 +49,7 @@ def hasRoute(start, end):
                 visited.append(curr)
                 for each in curr.adjacenies:
                     q.append(each)
+    return False
 
 
 root = MyNode('a')
@@ -66,6 +69,6 @@ root.dfs([])
 print "BFS:"
 root.bfs()
 
-
+print "searching"
 hasRoute(c, d)
 hasRoute(root, c)
