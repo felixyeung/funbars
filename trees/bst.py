@@ -17,7 +17,7 @@ class BstNode:
             if self.right == None:
                 self.right = node
             else:
-                self.right.insert(node)
+                self.right.insert(node) 
 
     def inOrderPrint(self):
         if not self.left == None:

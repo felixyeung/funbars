@@ -21,6 +21,16 @@ class MyNode:
             print "looking at node %s at depth %d" % (node.val, depth)
             return  depth
 
+    def getDepthLists(self, depth, lol):
+        if not depth in lol:
+            lol[depth] = []
+        lol[depth].append(self.val)
+        if not self.left == None:
+            self.left.getDepthLists(depth + 1, lol)
+        if not self.right == None:
+            self.right.getDepthLists(depth + 1, lol)
+        return lol
+
 root = MyNode('a')
 b = MyNode('b')
 c = MyNode('c')
@@ -56,3 +66,5 @@ j.addLeft(l)
 l.addLeft(m)
 
 root.isBalanced()
+
+print root.getDepthLists(0, {})
