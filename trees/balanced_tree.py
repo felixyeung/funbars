@@ -31,6 +31,20 @@ class MyNode:
             self.right.getDepthLists(depth + 1, lol)
         return lol
 
+    def isBst(self, node):
+        #check self and left -> if > return
+        #check self and right -> if < return
+        #if left not empty check left tree
+        #if right not empty check right tree
+        #both true
+        if node == None:
+            return True
+        if not node.left == None and node.val < node.left.val:
+            return False
+        if not node.right == None and node.val > node.right.val:
+            return False
+        return self.isBst(node.left) and self.isBst(node.right)
+
 root = MyNode('a')
 b = MyNode('b')
 c = MyNode('c')
@@ -68,3 +82,28 @@ l.addLeft(m)
 root.isBalanced()
 
 print root.getDepthLists(0, {})
+
+bst = MyNode(4)
+one = MyNode(1)
+two = MyNode(2)
+three = MyNode(3)
+five = MyNode(5)
+six = MyNode(6)
+seven = MyNode(7)
+
+bst.addLeft(two)
+bst.addRight(six)
+
+two.addLeft(one)
+two.addRight(three)
+
+six.addLeft(five)
+six.addRight(seven)
+
+print bst.isBst(bst)
+print root.isBst(root)
+
+bst.addLeft(six)
+bst.addRight(two)
+
+print bst.isBst(bst)
