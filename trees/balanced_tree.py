@@ -31,7 +31,7 @@ class MyNode:
             self.right.getDepthLists(depth + 1, lol)
         return lol
 
-    def isBst(self, node):
+    def isBst(self, node, lb, rb):
         #check self and left -> if > return
         #check self and right -> if < return
         #if left not empty check left tree
@@ -39,11 +39,13 @@ class MyNode:
         #both true
         if node == None:
             return True
+        if (not lb == None and node.val < lb) or (not rb == None and node.val > rb):
+            return False
         if not node.left == None and node.val < node.left.val:
             return False
         if not node.right == None and node.val > node.right.val:
             return False
-        return self.isBst(node.left) and self.isBst(node.right)
+        return self.isBst(node.left, lb, node.val) and self.isBst(node.right, node.val, rb)
 
 root = MyNode('a')
 b = MyNode('b')
@@ -100,10 +102,21 @@ two.addRight(three)
 six.addLeft(five)
 six.addRight(seven)
 
-print bst.isBst(bst)
-print root.isBst(root)
+print bst.isBst(bst, None, None)
+print root.isBst(root, None, None)
 
 bst.addLeft(six)
 bst.addRight(two)
 
-print bst.isBst(bst)
+print bst.isBst(bst, None, None)
+
+bst2 = MyNode(20)
+ten = MyNode(10)
+thirty = MyNode(30)
+twenty_five = MyNode(25)
+
+bst2.addLeft(ten)
+bst2.addRight(thirty)
+ten.addRight(twenty_five)
+
+print bst2.isBst(bst2, None, None)
