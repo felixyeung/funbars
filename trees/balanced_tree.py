@@ -1,13 +1,16 @@
 class MyNode:
     def __init__(self, val):
+        self.parent = None
         self.val = val
         self.left = None
         self.right = None
 
     def addLeft(self, node):
+        node.parent = self
         self.left = node
 
     def addRight(self, node):
+        node.parent = self
         self.right = node
 
     def isBalanced(self):
@@ -46,6 +49,31 @@ class MyNode:
         if not node.right == None and node.val > node.right.val:
             return False
         return self.isBst(node.left, lb, node.val) and self.isBst(node.right, node.val, rb)
+
+    def inOrderNext(self):
+        print "looking for next of %s" % (self.val)
+        if self == None:
+            return None
+        # if there are any nodes at all to the right of self, the next one must be in there.
+        if not self.right == None:
+
+            return nextFromRight(self.right)
+        else:
+            curr = self
+            parent = self.parent
+            while not parent == None and not parent.left == curr:
+                curr = parent
+                parent = curr.parent
+            if parent == None:
+                return None
+            return parent.val
+
+
+def nextFromRight(node):
+    if node.left == None:
+        return node.val
+    else:
+        return nextFromRight(node.left)
 
 root = MyNode('a')
 b = MyNode('b')
@@ -120,3 +148,41 @@ bst2.addRight(thirty)
 ten.addRight(twenty_five)
 
 print bst2.isBst(bst2, None, None)
+
+print "restoring bst"
+bst = MyNode(4)
+one = MyNode(1)
+two = MyNode(2)
+three = MyNode(3)
+five = MyNode(5)
+six = MyNode(6)
+seven = MyNode(7)
+
+bst.addLeft(two)
+bst.addRight(six)
+
+two.addLeft(one)
+two.addRight(three)
+
+six.addLeft(five)
+six.addRight(seven)
+
+
+
+
+
+
+
+
+
+
+
+
+print "testing next:"
+
+print bst.inOrderNext()
+print two.inOrderNext()
+print three.inOrderNext()
+print five.inOrderNext()
+print six.inOrderNext()
+print seven.inOrderNext()
