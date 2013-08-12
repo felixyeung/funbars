@@ -22,7 +22,7 @@ class MyNode:
         else:
             depth = 1 + max(self.countDepth(node.left), self.countDepth(node.right))
             print "looking at node %s at depth %d" % (node.val, depth)
-            return  depth
+            return depth
 
     def getDepthLists(self, depth, lol):
         if not depth in lol:
@@ -64,6 +64,7 @@ class MyNode:
             while not parent == None and not parent.left == curr:
                 curr = parent
                 parent = curr.parent
+                
             if parent == None:
                 return None
             return parent.val
