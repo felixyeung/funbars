@@ -69,6 +69,7 @@ print d.commonParentBySide(g, e)
 print d.commonParentBySide(e, g)
 print d.commonParentBySide(h, e)
 print d.commonParentBySide(e, h)
+print d.commonParentBySide(a, c)
 print d.commonParentBySide(d, x)
 
 print findNode(d, b)
