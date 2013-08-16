@@ -14,17 +14,29 @@ class CommonParent(MyNode):
             return None
 
     def commonParentBySide(self, t1, t2):
+        if not findNode(self, t1) or not findNode(self, t2):
+            return None
+        return self.r_commonParentBySide(t1, t2)
+
+    def r_commonParentBySide(self, t1, t2):
+        if self == None:
+            return None
+        if self.val == t1.val or self.val == t2.val:
+            return self.val
+
         if (
                 (findNode(self.left, t1) and findNode(self.right, t2)) or
                 (findNode(self.left, t2) and findNode(self.right, t1))
            ):
             return self.val
-
-        elif not self.left == None:
-            return self.left.commonParentBySide(t1, t2)
-        elif not self.right == None:
-            return self.right.commonParentBySide(t1, t2)
+        else: #everything must be on the left or right.
+            seek_left = self.left.r_commonParentBySide(t1, t2)
+            if seek_left == None:
+                return self.right.r_commonParentBySide(t1, t2)
+            else:
+                return seek_left 
         return None
+
 
 def findNode(src, target):
     if src == None:
