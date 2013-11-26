@@ -40,16 +40,23 @@ def topologicalSortByDFS(courses):
     visited = {}
     # Look over each node, if the node is not visited,
     # go ahead and traverse its adjancies recusively.
-    for course in coures:
-        if not visited[course.key] == True:
+    for course in courses:
+        if not visited.get(course.key):
             topologicalSortHelper(course, visited, sorted_courses)
     return sorted_courses
 
 def topologicalSortHelper(course, visited, sorted_courses):
+    # Mark current node as visited
     visited[course.key] = True
+
+    # For each node in its adjacenies, visit recursively if it
+    # hasnt been visited already.
     for target in course.directs_to:
-        if not visited[target.key] == True:
+        if not visited.get(target.key):
             topologicalSortHelper(target, visited, sorted_courses)
+
+    # By appending to our topo list at the end, we ensure that the
+    # final nodes of our directed graph are appeneded first.
     sorted_courses.append(course)
 
 
@@ -69,3 +76,5 @@ createEdges(my_courses)
 
 for course in my_courses:
     print "Course %s has the directed edges of %s." % (course.key, [course.key for course in course.directs_to])
+
+print [course.key for course in topologicalSortByDFS(my_courses)]
