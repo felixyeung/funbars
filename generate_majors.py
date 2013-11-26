@@ -94,8 +94,8 @@ def reduceEdgesHelper(course, visited):
     for target in course.directs_to:
         print "   visiting %s" % (target["course"].key)
         print visited.get(target["course"].key)
-        if not visited.get(target["course"].key):
-            visited[target["course"].key] = True
+        if (not visited.get(target["course"].key)) and (not visited.get(course.key)):
+            visited[target["course"].key] = 1
             reduceEdgesHelper(target["course"], visited)
         else:
             print "From %s, %s is already visited" % (course.key, target["course"].key)
