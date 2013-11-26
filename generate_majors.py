@@ -13,6 +13,7 @@ class Course:
     def _addEdgeTo(self, target):
         self.directs_to.append(target)
 
+
 # HELPER CLASS
 # This is an implementation of a binary tree
 # That will serve as our binary serach tree for
@@ -24,12 +25,33 @@ class BST:
     def __init__(self, course):
         self.key = course
         self.items = []
+
 # This function will take a list of Course objects.
 # and create directed edges from each class that preceeds another
 # class. 
 def createEdges(list):
     for course in list:
         course.addEdges()
+
+# This function leverages DFS on our courses graph to sort
+# them in topological order
+def topologicalSortByDFS(courses):
+    sorted_courses = []
+    visited = {}
+    # Look over each node, if the node is not visited,
+    # go ahead and traverse its adjancies recusively.
+    for course in coures:
+        if not visited[course.key] == True:
+            topologicalSortHelper(course, visited, sorted_courses)
+    return sorted_courses
+
+def topologicalSortHelper(course, visited, sorted_courses):
+    visited[course.key] = True
+    for target in course.directs_to:
+        if not visited[target.key] == True:
+            topologicalSortHelper(target, visited, sorted_courses)
+    sorted_courses.append(course)
+
 
 # Begin data:
 A = Course({"key": "A", "diffculity": 1, "prereqs": [None]})
