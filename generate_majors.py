@@ -82,25 +82,35 @@ def createLongestPathsHelper(course, visited):
             target["valid"] = 0
 
 def reduceEdges(sorted_courses):
+    disconnected = []
     while sorted_courses:
         course = sorted_courses.pop();
         print "popping %s" % (course.key)
         #if not course.prereqs:
         visited = {}
-        reduceEdgesHelper(course, visited)
+        reduceEdgesHelper(course, visited, disconnected)
+    return disconnected
 
-def reduceEdgesHelper(course, visited):
+def reduceEdgesHelper(course, visited, disconnected):
     print visited
     for target in course.directs_to:
         print "   visiting %s" % (target["course"].key)
         print visited.get(target["course"].key)
         if (not visited.get(target["course"].key)):
             visited[target["course"].key] = 1
-            reduceEdgesHelper(target["course"], visited)
+            reduceEdgesHelper(target["course"], visited, disconnected
+                )
+
         else:
             print "From %s, %s is already visited" % (course.key, target["course"].key)
             target["valid"] = 0
+            disconnected.append([course, target["course"]])
 
+def recovergeEdges(edges):
+    for edge in edges:
+        if not edge[1].reachableFrom(edge[0]):
+            edge[0].addEdgeTo(edge[1])
+    return False
 
 # Begin data:
 I = Course({"key": "I", "diffculity": 9, "prereqs": [None]})
@@ -129,7 +139,9 @@ print [course.key for course in topologicalSortByDFS(my_courses)]
 
 # Popping off the stack, we want to invalidate all paths that are not the longest.
 #createLongestPaths(sorted_courses)
-reduceEdges(sorted_courses)
+disconnected = [(nodes[0].key, nodes[1].key) for nodes in reduceEdges(sorted_courses)]
+
+print disconnected
 
 for course in my_courses:
     print "Course %s has the directed edges of %s." % (course.key, {course["course"].key for course in course.directs_to if (course["valid"] == 1)})
