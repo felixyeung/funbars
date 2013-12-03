@@ -22,6 +22,6 @@ def choosePivot(list):
     else:
         return len(list) / 2
 
-qs = quickSort([11, 3, 12, 7, 4, 9, 1, 2, 5, 8, 6, 10, 13])
+qs = quickSort([11, 3, 12, 12, 7, 4, 9, 4, 1, 6, 2, 5, 8, 6, 10, 13])
 
 print qs
