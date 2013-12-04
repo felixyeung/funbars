@@ -41,21 +41,42 @@ def buildTree(words):
         # we know that this word must terminate at the current node.
         curr_node.completes.append(word)
 
-        # At this point, we have a graph wit
-
     return root
 
 def debugTree(node, depth):
-    print '%s %s (%s)' % ('---' * depth, node.char, node.completes)
+    print '%s %s' % ('---' * depth, node)
+    print '%s %s %s %s %s' % ('---' * depth, node.char, node.completes, [target.char for key, target in node.links.iteritems()], node.fail)
     for key, target in node.links.iteritems():
         debugTree(target, depth + 1)
 
-def buildFailFuncs(tree):
-    return false
+#BFS
+def buildFailFuncs(root):
+    q = []
+    visited = {}
+    first_occurance = {}
+
+    q.append(root)
+    while q:
+        curr = q[0]
+        q = q[1:]        
+
+        # If this will create fail links for instances of
+        # characters that have occured higher up in the tree
+        if curr.char not in visited:
+            visited[curr.char] = curr
+        else:
+            curr.fail = visited[curr.char]
+            
+        for key, node in curr.links.iteritems():
+            q.append(node)
+
+    return False
 
 val = 'foobarbazcatdogpig'
-match = ['foo', 'bar', 'baz', 'foobar', 'root', 'zoo']
+match = ['foo', 'bar', 'baz', 'foobar', 'zoo', 'arm']
 
 root = buildTree(match)
+
+buildFailFuncs(root)
 
 debugTree(root, 0)
