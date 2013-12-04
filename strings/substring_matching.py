@@ -6,19 +6,19 @@ class Node:
             self.char = None
             self.fail = None
             self.transitions = []
-            self.complete = False
+            self.complete = []
         else:
             self.key = substring
             self.char = char
             self.fail = None # root is the default failure transition
             self.transitions = [] # transition contains string keys 
-            self.complete = False
+            self.complete = []
 
     def addTrasition(self, node):
         self.transitions.append(node.key)
 
     def setTargetWord(self):
-        self.complete = True
+        self.complete.append(self.key)
 
 class Machine:
     def __init__(self):
@@ -42,7 +42,7 @@ class Machine:
                 # Otherwise, build a new node.
                 else:
                     new_node = Node(prefix, char)
-                    new_node.fail = root
+                    new_node.fail = None
 
                     curr_node.addTrasition(new_node)
                     self.addNode(new_node)
@@ -65,31 +65,42 @@ class Machine:
                 # If the current node is not root, attempt to create
                 # a failure transition to the longest suffix.
                 if not curr_node == root:
-                    linkLongestSuffix(visited, node)
+                    self.linkLongestSuffix(visited, curr_node)
                 for key in curr_node.transitions:
                     queue.append(self.nodes[key])
 
-    def linkLongestSuffix(visited, node):
+    def linkLongestSuffix(self, 
+        visited, node):
         # Loop over suffixes, as soon as one is found
         # add it as a failure transition of the current node
         for i in range (1, len(node.key)):
             suffix = node.key[i:]
-            if self.nodes[suffix] in visited:
+            if self.nodes.get(suffix) and self.nodes[suffix] in visited:
                 node.fail = suffix
                 return True;
         return False;
 
     def debugTree(self, node, depth):
-        print '%s %s' % (depth * '---', node.key)
+        print '%-30s %-10s %-20s %-15s %-15s' % (depth * '---',
+                                                 node.key,
+                                                 [each for each in node.transitions],
+                                                 [each for each in node.complete],
+                                                 node.fail
+
+                                                 )
         for transition in node.transitions:
             self.debugTree(self.nodes[transition], depth + 1)
 
 
 
 string = 'foobarbazcatarmts'
-matches = ['foo', 'foobar', 'ba', 'cat', 'bar', 'baz',
- 'arm']
+matches = ['ar', 'foo', 'foobar', 'ba', 'cat', 'bar', 'baz', 'arm']
 
 m = Machine()
 m.createTree(matches)
+
+print m.nodes
+
+m.buildFailureTransitions()
+
 m.debugTree(m.root, 0)
