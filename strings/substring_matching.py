@@ -1,82 +1,87 @@
-class CharNode:
-    def __init__(self, char):
-        self.char = char       # contains a character (the same character might have multiple nodes!)
-        self.links = {}        # Edges leading to the next character
-        self.completes = []    # contains all words that can be complete if a tree walk stops at this node.
-        self.fail = None       # points to a shallower node holding the same character, this allows us to continue
-                               # to search under a different path if the current path ends in failure
-                               # (i.e. no transition to the next node)
-
-    # This function returns true if there exists a path from the
-    # current node to a node holding a character 'char'
-    def hasLinkToChar(self, char):
-        if char in self.links:
-            return True
-        return False
-
-def buildTree(words):
-    # First, create a root Node that holds no char and fails to itself
-    root = CharNode(None)
-    root.fail = root
-
-    for word in words:
-        # restart our building from root
-        curr_node = root
-        for char in word:
-            # If this character is linked from the node we are on,
-            # move on to that linked node
-            if curr_node.hasLinkToChar(char):
-                curr_node = curr_node.links[char]
-            # If a path to this character does not exist that from our current
-            # node, create it and move to it
-            else:
-                new_node = CharNode(char)
-                # In addition, if we are currently at root, everything coming from
-                # root will fail to root.
-                if curr_node == root:
-                    new_node.fail = root
-                curr_node.links[char] = new_node
-                curr_node = new_node
-        # at this point, we have looked at each character of a word
-        # we know that this word must terminate at the current node.
-        curr_node.completes.append(word)
-
-    return root
-
-def debugTree(node, depth):
-    print '%s %s' % ('---' * depth, node)
-    print '%s %s %s %s %s' % ('---' * depth, node.char, node.completes, [target.char for key, target in node.links.iteritems()], node.fail)
-    for key, target in node.links.iteritems():
-        debugTree(target, depth + 1)
-
-#BFS
-def buildFailFuncs(root):
-    q = []
-    visited = {}
-    first_occurance = {}
-
-    q.append(root)
-    while q:
-        curr = q[0]
-        q = q[1:]        
-
-        # If this will create fail links for instances of
-        # characters that have occured higher up in the tree
-        if curr.char not in visited:
-            visited[curr.char] = curr
+class Node:
+    def __init__(self, substring, char):
+        if substring == None or char == None:
+            # We are probably creating a root
+            self.key = None
+            self.char = None
+            self.fail = None
+            self.transitions = []
+            self.complete = False
         else:
-            curr.fail = visited[curr.char]
-            
-        for key, node in curr.links.iteritems():
-            q.append(node)
+            self.key
+             = substring
+            self.char = char
+            self.fail = None # root is the default failure transition
+            self.transitions = [] # transition contains string keys 
+            self.complete = False
 
-    return False
+    def addTrasition(self, node):
+        self.transitions.append(node.key)
 
-val = 'foobarbazcatdogpig'
-match = ['foo', 'bar', 'baz', 'foobar', 'zoo', 'arm']
+    def setTargetWord(self):
+        self.complete = True
 
-root = buildTree(match)
+class Machine:
+    def __init__(self):
+        self.nodes = {} #dictionary of nodes index by node.key
+        self.root = Node(None, None)
 
-buildFailFuncs(root)
+    def addNode(self, node):
+        self.nodes[node.key] = node
 
-debugTree(root, 0)
+    def createTree(self, words):
+        root = self.root
+        for word in words:
+            curr_node = root
+            prefix = ''
+            for char in word:
+                prefix = prefix + char
+                # If there's a transition to an existing node with this prefix,
+                # go ahead and "walk" to it.
+                if prefix in curr_node.transitions:
+                    curr_node = self.nodes[prefix]
+                # Otherwise, build a new node.
+                else:
+                    new_node = Node(prefix, char)
+                    new_node.fail = root
+
+                    curr_node.addTrasition(new_node)
+                    self.addNode(new_node)
+                    curr_node = new_node
+            # After completeing all characters, the current node must be
+            # a word we want to look for
+            curr_node.setTargetWord()
+
+    def buildFailureTransitions(self):
+        root = self.root
+        queue = []
+        visited = []
+        queue.append(root)
+        while queue:
+            curr_node = queue[0]
+            queue = queue[1:]
+
+            if not curr_node in visited:
+                visited.append(curr_node)
+                # If the current node is not root, attempt to create
+                # a failure transition to the longest suffix.
+                if not curr_node == root:
+                    linkLongestSuffix(visited, node)
+                for key in curr_node.transitions:
+                    queue.append(self.nodes[key])
+
+    def linkLongestSuffix(visited, node):
+        # Loop over suffixes, as soon as one is found
+        # add it as a failure transition of the current node
+        for i in range (1, len(node.key)):
+            suffix = node.key[i:]
+            if self.nodes[suffix] in visited:
+                node.fail = suffix
+                return True;
+        return False;
+
+string = 'foobarbazcatarmts'
+matches = ['foo', 'foobar', 'ba', 'cat', 'bar', 'arm']
+
+m = Machine()
+m.createTree(matches)
