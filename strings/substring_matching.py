@@ -8,8 +8,7 @@ class Node:
             self.transitions = []
             self.complete = False
         else:
-            self.key
-             = substring
+            self.key = substring
             self.char = char
             self.fail = None # root is the default failure transition
             self.transitions = [] # transition contains string keys 
@@ -88,7 +87,8 @@ class Machine:
 
 
 string = 'foobarbazcatarmts'
-matches = ['foo', 'foobar', 'ba', 'cat', 'bar', 'arm']
+matches = ['foo', 'foobar', 'ba', 'cat', 'bar', 'baz',
+ 'arm']
 
 m = Machine()
 m.createTree(matches)
