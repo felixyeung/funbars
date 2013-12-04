@@ -80,8 +80,16 @@ class Machine:
                 return True;
         return False;
 
+    def debugTree(self, node, depth):
+        print '%s %s' % (depth * '---', node.key)
+        for transition in node.transitions:
+            self.debugTree(self.nodes[transition], depth + 1)
+
+
+
 string = 'foobarbazcatarmts'
 matches = ['foo', 'foobar', 'ba', 'cat', 'bar', 'arm']
 
 m = Machine()
 m.createTree(matches)
+m.debugTree(m.root, 0)
