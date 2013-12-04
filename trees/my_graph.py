@@ -51,6 +51,8 @@ def hasRoute(start, end):
                     q.append(each)
     return False
 
+def shortestPath(start, end):
+    return False
 
 root = MyNode('a')
 b = MyNode('b')

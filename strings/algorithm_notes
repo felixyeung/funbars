@@ -1,0 +1,12 @@
+Start with a root Node.
+For each word to search, go back to the root node.
+    curr = root
+    for each character in word
+        examine current node for a link to this character.
+        if such a link to the character exists in curr.links
+            advance the current node to this character node
+        if no such link exist
+            create a new node for this character
+            add a link to this new node from the curr node
+            advance the curr node to this new node
+    at this point, the current node should "complete the word."
