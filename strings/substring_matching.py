@@ -20,6 +20,11 @@ class Node:
     def setTargetWord(self):
         self.complete.append(self.key)
 
+    def isRoot(self):
+        return self.key == None and self.fail == None
+
+
+
 class Machine:
     def __init__(self):
         self.nodes = {} #dictionary of nodes index by node.key
@@ -91,10 +96,23 @@ class Machine:
         for transition in node.transitions:
             self.debugTree(self.nodes[transition], depth + 1)
 
+    def search(self, string):
+        result = []
+        curr_node = self.root
+        prefix = ''
+        for i in range(0, len(string)):
+            prefix = prefix + string[i]
+            if curr_node.key == prefix:
+                result = result + curr_node.complete
+                continue
+            else:
+                return 'FUBAR'
+        return result;
+
 
 
 string = 'foobarbazcatarmts'
-matches = ['ar', 'foo', 'foobar', 'ba', 'cat', 'bar', 'baz', 'arm']
+matches = ['ar', 'foo', 'foobar', 'ba', 'cat', 'bar', 'barb', 'baz', 'arm']
 
 m = Machine()
 m.createTree(matches)
@@ -104,3 +122,5 @@ print m.nodes
 m.buildFailureTransitions()
 
 m.debugTree(m.root, 0)
+
+print m.search(string)
