@@ -127,8 +127,7 @@ def searchOnceAtRoot(machine, char, result):
     root = machine.root
     target_name = targetName(root, char)
 
-    print 'looking for %s in root' % (target_name
-        )
+    print 'looking for %s in root' % (target_name)
 
     if target_name in root.transitions:
         addToResults(result, root.complete)
@@ -149,8 +148,7 @@ def addToResults(result, complete):
         result.append(word)
 
 string = 'foobarbazcatarmtszfo'
-matches = ['ar', 'foo', 'zfoo',
- 'fooo', 'foobar', 'ba', 'cat', 'bar', '343', 'bazz', 'barb', 'baz', 'arm']
+matches = ['ar', 'foo', 'zfoo', 'fooo', 'foobar', 'ba', 'cat', 'bar', '343', 'bazz', 'barb', 'baz', 'arm']
 
 m = Machine()
 m.createTree(matches)
