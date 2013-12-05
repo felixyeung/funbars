@@ -97,24 +97,64 @@ class Machine:
 
     def search(self, string):
         result = []
-        curr_node = self.root
+        root = m.root
+        curr_node = root
+        for char in string:
+            curr_node = searchHelper(self, curr_node, char, result)
+            # We are unable to land exit the node
+            if curr_node == None:
+                # We will either remain at root, or be able to advance.
+                curr_node = searchOnceAtRoot(self, char, result)
+            print 'moving onto the next node'
+        return result
+
+def searchHelper(machine, curr_node, char, result):
+    target_name = targetName(curr_node, char)
+
+    print 'looking for %s in %s' % (target_name, curr_node.key)
+
+    if target_name in curr_node.transitions:
+        print '   %s found.' % (target_name)
+        addToResults(result, machine.nodes[target_name].complete)
+        return machine.nodes[target_name]
+    else:
+        if curr_node.fail == None:
+            return None
+        else:
+            return searchHelper(machine, machine.nodes[curr_node.fail], char, result)
+
+def searchOnceAtRoot(machine, char, result):
+    root = machine.root
+    target_name = targetName(root, char)
+
+    print 'looking for %s in root' % (target_name
+        )
+
+    if target_name in root.transitions:
+        addToResults(result, root.complete)
+        return machine.nodes[target_name]
+    else:
+        return root
+
+def targetName(node, char):
+    if node.key == None:
         prefix = ''
-        for i in range(0, len(string)):
-            prefix = prefix + string[i]
-            if curr_node.key == prefix:
-                result = result + curr_node.complete
-                continue
-            else:
-                return 'FUBAR'
-        return result;
+    else:
+        prefix = node.key
+    return prefix + char
 
+def addToResults(result, complete):
 
+    for word in complete:
+        result.append(word)
 
-string = 'foobarbazcatarmts'
-matches = ['ar', 'foo', 'foobar', 'ba', 'cat', 'bar', 'barb', 'baz', 'arm']
+string = 'foobarbazcatarmtszfo'
+matches = ['ar', 'foo', 'zfoo',
+ 'fooo', 'foobar', 'ba', 'cat', 'bar', '343', 'bazz', 'barb', 'baz', 'arm']
 
 m = Machine()
 m.createTree(matches)
+
 
 m.buildFailureTransitions()
 print '%-20s %-15s %-30s %-30s %-15s' % ('depth',
