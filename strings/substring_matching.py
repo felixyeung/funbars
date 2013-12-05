@@ -101,7 +101,7 @@ class Machine:
         curr_node = root
         for char in string:
             curr_node = searchHelper(self, curr_node, char, result)
-            # We are unable to land exit the node
+            # We are unable to exit the node
             if curr_node == None:
                 # We will either remain at root, or be able to advance.
                 curr_node = searchOnceAtRoot(self, char, result)
