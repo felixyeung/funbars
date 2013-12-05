@@ -1,3 +1,5 @@
+import os
+
 class Node:
     def __init__(self, substring, char):
         if substring == None or char == None:
@@ -163,3 +165,14 @@ print '%-20s %-15s %-30s %-30s %-15s' % ('depth',
 m.debugTree(m.root, 0)
 
 print m.search(string)
+
+
+m2 = Machine()
+m2.createTree(['Legions', 'legions', 'legion', 'Legion'])
+m2.buildFailureTransitions()
+m2.debugTree(m2.root, 0)
+
+with open(os.path.dirname(os.path.abspath(__file__)) + '/gallicwars.txt', 'r') as f:
+    gallicwars = f.read()
+
+print 'Caesar mentions legions %s times in The Gallic Wars.' % len(m2.search(gallicwars))
