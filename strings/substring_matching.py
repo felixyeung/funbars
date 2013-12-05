@@ -74,25 +74,24 @@ class Machine:
                 for key in curr_node.transitions:
                     queue.append(self.nodes[key])
 
-    def linkLongestSuffix(self, 
-        visited, node):
+    def linkLongestSuffix(self, visited, node):
         # Loop over suffixes, as soon as one is found
         # add it as a failure transition of the current node
         for i in range (1, len(node.key)):
             suffix = node.key[i:]
             if self.nodes.get(suffix) and self.nodes[suffix] in visited:
                 node.fail = suffix
+                # In addition, add all the complete words in the longest suffix to this node
+                node.complete = node.complete + self.nodes[suffix].complete
                 return True;
         return False;
 
     def debugTree(self, node, depth):
-        print '%-30s %-10s %-20s %-15s %-15s' % (depth * '---',
+        print '%-20s %-15s %-30s %-30s %-15s' % (depth * '---',
                                                  node.key,
                                                  [each for each in node.transitions],
                                                  [each for each in node.complete],
-                                                 node.fail
-
-                                                 )
+                                                 node.fail)
         for transition in node.transitions:
             self.debugTree(self.nodes[transition], depth + 1)
 
@@ -117,10 +116,12 @@ matches = ['ar', 'foo', 'foobar', 'ba', 'cat', 'bar', 'barb', 'baz', 'arm']
 m = Machine()
 m.createTree(matches)
 
-print m.nodes
-
 m.buildFailureTransitions()
-
+print '%-20s %-15s %-30s %-30s %-15s' % ('depth',
+                                         'unique label',
+                                         'nodes accessible',
+                                         'target words completed',
+                                         'longest suffix')
 m.debugTree(m.root, 0)
 
 print m.search(string)
